@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Familiares - Sistema de Gestión</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>💰 Finanzas Familiares</h1>
+                <p>Sistema de gestión financiera con base de datos simulada</p>
+            </div>
+            <div class="login-tabs">
+                <button class="login-tab active" data-tab="login">Iniciar Sesión</button>
+                <button class="login-tab" data-tab="register">Registrarse</button>
+            </div>
+            
+            <!-- Formulario de Login -->
+            <form id="login-form" class="login-form active">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Ingresar</button>
+            </form>
+            
+            <!-- Formulario de Registro -->
+            <form id="register-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" id="register-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="register-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" id="register-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rol</label>
+                    <select id="register-role" class="form-control">
+                        <option value="admin">Administrador</option>
+                        <option value="user">Usuario</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Registrarse</button>
+            </form>
+            
+            <!-- Demo rápido -->
+            <div class="demo-access">
+                <hr style="margin: 24px 0;">
+                <p>Acceso rápido de demostración:</p>
+                <button class="btn btn--secondary btn--full-width" id="demo-login">Demo Camilo (Admin)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aplicación principal -->
+    <div id="main-app" class="main-app hidden">
+        <!-- Navegación lateral -->
+        <nav class="sidebar">
+            <div class="sidebar__header">
+                <h2>💰 Finanzas</h2>
+                <div class="user-info">
+                    <span id="current-user-name"></span>
+                    <button class="btn btn--sm btn--outline" id="logout-btn">Salir</button>
+                </div>
+            </div>
+            <ul class="sidebar__menu">
+                <li><button class="sidebar__item active" data-section="dashboard">📊 Dashboard</button></li>
+                <li><button class="sidebar__item" data-section="meses">📅 Gestión de Meses</button></li>
+                <li><button class="sidebar__item" data-section="categorias">📝 Categorías</button></li>
+                <li><button class="sidebar__item" data-section="cuentas">💳 Cuentas</button></li>
+                <li><button class="sidebar__item" data-section="presupuesto">📈 Presupuesto</button></li>
+                <li><button class="sidebar__item" data-section="transacciones">📋 Transacciones</button></li>
+                <li><button class="sidebar__item" data-section="reportes">📊 Reportes</button></li>
+                <li><button class="sidebar__item" data-section="database">🗄️ Base de Datos</button></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header__content">
+                    <h1 id="current-month-display">Junio 2025</h1>
+                    <div class="header__actions">
+                        <select id="month-selector" class="form-control">
+                            <option value="junio_2025">Junio 2025</option>
+                        </select>
+                        <button class="btn btn--sm btn--secondary" id="backup-btn">💾 Backup</button>
+                        <button class="btn btn--sm btn--outline" id="restore-btn">📁 Restaurar</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Resumen Financiero</h3>
+                            <div class="summary-stats">
+                                <div class="stat">
+                                    <span class="stat__label">Ingresos Totales</span>
+                                    <span class="stat__value" id="total-ingresos">$0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat__label">Gastos Estimados</span>
+                                    <span class="stat__value" id="total-estimado">$0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat__label">Gastos Reales</span>
+                                    <span class="stat__value" id="total-real">$0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat__label">Balance</span>
+                                    <span class="stat__value" id="balance">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Estado por Categorías</h3>
+                            <div id="categories-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Actividad Reciente</h3>
+                            <div id="recent-activity"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gestión de Meses -->
+            <section id="meses" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Meses</h2>
+                    <button class="btn btn--primary" id="add-month-btn">+ Nuevo Mes</button>
+                </div>
+                <div id="months-list" class="months-grid"></div>
+            </section>
+
+            <!-- Gestión de Categorías -->
+            <section id="categorias" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Categorías</h2>
+                    <button class="btn btn--primary" id="add-category-btn">+ Nueva Categoría</button>
+                </div>
+                <div id="categories-management"></div>
+            </section>
+
+            <!-- Gestión de Cuentas -->
+            <section id="cuentas" class="content-section">
+                <div class="section-header">
+                    <h2>Cuentas Bancarias</h2>
+                    <button class="btn btn--primary" id="add-account-btn">+ Nueva Cuenta</button>
+                </div>
+                <div id="accounts-management" class="accounts-grid"></div>
+            </section>
+
+            <!-- Presupuesto -->
+            <section id="presupuesto" class="content-section">
+                <div class="section-header">
+                    <h2>Presupuesto Detallado</h2>
+                    <button class="btn btn--secondary" id="generate-budget-btn">🔄 Generar Presupuesto</button>
+                </div>
+                <div id="budget-details"></div>
+            </section>
+
+            <!-- Transacciones -->
+            <section id="transacciones" class="content-section">
+                <div class="section-header">
+                    <h2>Historial de Transacciones</h2>
+                    <div class="header__actions">
+                        <select id="transaction-filter" class="form-control">
+                            <option value="all">Todas las categorías</option>
+                        </select>
+                        <button class="btn btn--secondary" id="export-transactions-btn">📤 Exportar</button>
+                    </div>
+                </div>
+                <div id="transactions-list"></div>
+            </section>
+
+            <!-- Reportes -->
+            <section id="reportes" class="content-section">
+                <div class="section-header">
+                    <h2>Reportes y Análisis</h2>
+                </div>
+                <div class="reports-grid">
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Cumplimiento del Presupuesto</h3>
+                            <div id="budget-compliance"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Distribución por Categoría</h3>
+                            <div id="category-breakdown"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Tendencia Mensual</h3>
+                            <div id="monthly-trend"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Base de Datos -->
+            <section id="database" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Base de Datos</h2>
+                    <div class="header__actions">
+                        <button class="btn btn--secondary" id="reset-db-btn">🔄 Reiniciar DB</button>
+                        <button class="btn btn--primary" id="optimize-db-btn">⚡ Optimizar</button>
+                    </div>
+                </div>
+                <div class="database-management">
+                    <div class="db-stats-grid">
+                        <div class="card">
+                            <div class="card__body">
+                                <h4>Estadísticas de la Base de Datos</h4>
+                                <div id="db-stats"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__body">
+                                <h4>Consultas Recientes</h4>
+                                <div id="recent-queries"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__body">
+                            <h4>Estructura de Tablas</h4>
+                            <div id="table-structure"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Botón flotante -->
+        <button class="floating-btn" id="quick-add-btn">+</button>
+    </div>
+
+    <!-- Modales -->
+    
+    <!-- Modal de registro rápido -->
+    <div id="quick-add-modal" class="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Registrar Gasto Rápido</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="quick-add-form">
+                    <div class="form-group">
+                        <label class="form-label">Monto ($)</label>
+                        <input type="number" id="amount-input" class="form-control amount-input" placeholder="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Categoría</label>
+                        <div class="category-grid" id="category-selection"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Concepto</label>
+                        <div class="concept-buttons" id="concept-selection"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Cuenta</label>
+                        <select id="account-select" class="form-control" required>
+                            <option value="">Seleccionar cuenta</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Responsable</label>
+                        <select id="responsible-select" class="form-control">
+                            <option value="Camilo">Camilo</option>
+                            <option value="Esposa">Esposa</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Comentario</label>
+                        <textarea id="comment-input" class="form-control" rows="2" placeholder="Comentario opcional..."></textarea>
+                    </div>
+                    
+                    <div class="modal__footer">
+                        <button type="button" class="btn btn--secondary modal-cancel">Cancelar</button>
+                        <button type="submit" class="btn btn--primary">💾 Guardar Gasto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal genérico para formas -->
+    <div id="generic-modal" class="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="modal-title">Modal</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="generic-form">
+                    <div id="form-fields"></div>
+                    <div class="modal__footer">
+                        <button type="button" class="btn btn--secondary modal-cancel">Cancelar</button>
+                        <button type="submit" class="btn btn--primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Confirmar Acción</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <p id="confirm-message">¿Estás seguro de realizar esta acción?</p>
+                <div class="modal__footer">
+                    <button type="button" class="btn btn--secondary" id="confirm-cancel">Cancelar</button>
+                    <button type="button" class="btn btn--primary" id="confirm-ok">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input oculto para restaurar backup -->
+    <input type="file" id="restore-input" accept=".json" style="display: none;">
+
+    <script src="app.js"></script>
+</body>
+</html>

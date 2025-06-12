@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  color_code: MyString
+  budget: one
+  user: one
+
+two:
+  name: MyString
+  color_code: MyString
+  budget: two
+  user: two

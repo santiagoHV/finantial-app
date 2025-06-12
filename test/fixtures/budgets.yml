@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  amount: 9.99
+  currency: MyString
+  description: MyText
+  billing_cycle: one
+  category: one
+
+two:
+  type: 
+  amount: 9.99
+  currency: MyString
+  description: MyText
+  billing_cycle: two
+  category: two
