@@ -33,6 +33,5 @@ test:
 
 production:
   <<: *default
-  database: personal_financer_production
-  username: personal_financer
-  password: <%= ENV["PERSONAL_FINANCER_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
